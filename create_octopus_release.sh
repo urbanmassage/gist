@@ -1,6 +1,10 @@
 set -f
 
 BASE_DIR=$(dirname $0)
+
+zip -r $CIRCLE_PROJECT_REPONAME.${BUILD_NO}.zip $BASE_DIR/deploy.yml
+mv $CIRCLE_PROJECT_REPONAME.${BUILD_NO}.zip $BASE_DIR/$CIRCLE_PROJECT_REPONAME.${BUILD_NO}.zip
+
 curl -X POST http://$OCTOPUS_BASE/api/packages/raw -H "X-Octopus-ApiKey:$OCTO_API_KEY" -F "data=@${BASE_DIR}/$CIRCLE_PROJECT_REPONAME.$BUILD_NO.zip"
 
 names=$(curl -s 'http://$OCTOPUS_BASE/api/projects/all' -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Name')
