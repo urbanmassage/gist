@@ -11,6 +11,9 @@ curl -X POST $OCTOPUS_BASE/api/packages/raw -H "X-Octopus-ApiKey:$OCTO_API_KEY" 
 names=$(curl -s '$OCTOPUS_BASE/api/projects/all' -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Name')
 ids=$(curl -s '$OCTOPUS_BASE/api/projects/all' -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Id')
 
+echo $names
+echo $ids
+
 names="${names//\"}"
 ids="${ids//\"}"
 
