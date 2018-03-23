@@ -2,19 +2,18 @@ set -f
 
 BASE_DIR=$(dirname $0)
 RELEASE_DIR=$BASE_DIR/deploy
+OCTOPUS_PROJECTS_URL=$OCTOPUS_BASE/api/projects/all
 
 zip -r $CIRCLE_PROJECT_REPONAME.${BUILD_NO}.zip $RELEASE_DIR/deploy.yml
 mv $BASE_DIR/$CIRCLE_PROJECT_REPONAME.${BUILD_NO}.zip $RELEASE_DIR/$CIRCLE_PROJECT_REPONAME.${BUILD_NO}.zip
 
 curl -X POST $OCTOPUS_BASE/api/packages/raw -H "X-Octopus-ApiKey:$OCTO_API_KEY" -F "data=@${RELEASE_DIR}/$CIRCLE_PROJECT_REPONAME.$BUILD_NO.zip"
 
-echo "Fetching names and ids of projects"
-names=$(curl -s '$OCTOPUS_BASE/api/projects/all' -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Name')
-ids=$(curl -s '$OCTOPUS_BASE/api/projects/all' -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Id')
-echo "Retrieved names and ids"
+echo $OCTOPUS_PROJECTS_URL
+curl $OCTOPUS_PROJECTS_URL -H "X-Octopus-ApiKey:$OCTO_API_KEY"
 
-echo $names
-echo $ids
+names=$(curl -s $OCTOPUS_PROJECTS_URL -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Name')
+ids=$(curl -s $OCTOPUS_PROJECTS_URL -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Id')
 
 names="${names//\"}"
 ids="${ids//\"}"
@@ -23,8 +22,6 @@ namelist=(${names//,/ })
 idslist=(${ids//,/ })
 
 for i in ${!namelist[@]}; do
-    echo ${namelist[$i]}
-    echo ${idslist[$i]}
     if [[ ${namelist[$i]} == "$CIRCLE_PROJECT_REPONAME" ]];
     then
         project_id=${idslist[$i]}
