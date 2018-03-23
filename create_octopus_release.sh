@@ -7,7 +7,7 @@ OCTOPUS_PROJECTS_URL="${OCTOPUS_BASE}/api/projects/all"
 PROJECT_NAME="${CIRCLE_PROJECT_REPONAME}.${BUILD_NO}"
 ZIP_FILE = "${PROJECT_NAME}.zip"
 
-zip -r "${PROJECT_NAME}.zip" "${RELEASE_DIR}/deploy.yml"
+zip -r "${BASE_DIR}/${ZIP_FILE}" "${RELEASE_DIR}/deploy.yml"
 mv "${BASE_DIR}/${ZIP_FILE}" "${RELEASE_DIR}/${ZIP_FILE}"
 
 post_status_code=$(curl -s --output /dev/stderr --write-out "%{http_code}" -X POST ${OCTOPUS_BASE}/api/packages/raw -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -F "data=@${RELEASE_DIR}/${ZIP_FILE}")
