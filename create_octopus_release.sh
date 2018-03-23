@@ -8,8 +8,10 @@ mv $BASE_DIR/$CIRCLE_PROJECT_REPONAME.${BUILD_NO}.zip $RELEASE_DIR/$CIRCLE_PROJE
 
 curl -X POST $OCTOPUS_BASE/api/packages/raw -H "X-Octopus-ApiKey:$OCTO_API_KEY" -F "data=@${RELEASE_DIR}/$CIRCLE_PROJECT_REPONAME.$BUILD_NO.zip"
 
+echo "Fetching names and ids of projects"
 names=$(curl -s '$OCTOPUS_BASE/api/projects/all' -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Name')
 ids=$(curl -s '$OCTOPUS_BASE/api/projects/all' -H "X-Octopus-ApiKey:$OCTO_API_KEY" | jq '.[] | .Id')
+echo "Retrieved names and ids"
 
 echo $names
 echo $ids
