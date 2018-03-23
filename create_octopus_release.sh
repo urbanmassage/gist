@@ -18,6 +18,8 @@ namelist=(${names//,/ })
 idslist=(${ids//,/ })
 
 for i in ${!namelist[@]}; do
+    echo ${namelist[$i]}
+    echo ${idslist[$i]}
     if [[ ${namelist[$i]} == "$CIRCLE_PROJECT_REPONAME" ]];
     then
         project_id=${idslist[$i]}
@@ -28,5 +30,6 @@ for i in ${!namelist[@]}; do
         then
             exit $status_code
         fi
+        break
     fi
 done
