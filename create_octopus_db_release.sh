@@ -31,6 +31,7 @@ for i in ${!namelist[@]}; do
     then
         project_id=${idslist[$i]}
         channel_id=$(curl -s ${OCTOPUS_BASE}/api/projects/${project_id}/channels?take=1 -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.Items[0].Id')
+        channel_id="${channel_id//\"}"
         status_code=$(curl --silent --output /dev/stderr --write-out "%{http_code}" -X POST ${OCTOPUS_BASE}/api/releases -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -H "content-type:application/json" -d "{\"ProjectId\":\"${project_id}\", \"Version\":\"${BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [{\"StepName\": \"Unpack Deployment Assets\",\"ActionName\": \"Unpack Deployment Assets\",\"Version\": \"${BUILD_NO}\"}]}")
         if [ ${status_code} -ge 300 ];
         then
