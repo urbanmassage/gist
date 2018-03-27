@@ -11,15 +11,15 @@ ZIP_FILE="${PROJECT_NAME}.zip"
 zip -r "${BASE_DIR}/${ZIP_FILE}" "${RELEASE_DIR}/deploy.yml"
 mv "${BASE_DIR}/${ZIP_FILE}" "${RELEASE_DIR}/${ZIP_FILE}"
 
-post_status_code=$(curl -s --output /dev/stderr --write-out "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/packages/raw -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -F "data=@${RELEASE_DIR}/${ZIP_FILE}")
+post_status_code=$(curl --silent --output /dev/stderr --write-out "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/packages/raw -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -F "data=@${RELEASE_DIR}/${ZIP_FILE}")
 
 if [ ${post_status_code} -ge 300 ];
 then
     exit ${post_status_code};
 fi
 
-names=$(curl -s ${OCTOPUS_PROJECTS_URL} -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.[] | .Name')
-ids=$(curl -s ${OCTOPUS_PROJECTS_URL} -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.[] | .Id')
+names=$(curl --silent ${OCTOPUS_PROJECTS_URL} -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.[] | .Name')
+ids=$(curl --silent ${OCTOPUS_PROJECTS_URL} -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.[] | .Id')
 
 names="${names//\"}"
 ids="${ids//\"}"
