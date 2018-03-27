@@ -31,7 +31,7 @@ for i in ${!namelist[@]}; do
     if [[ ${namelist[$i]} == "${CIRCLE_PROJECT_REPONAME}" ]];
     then
         project_id=${idslist[$i]}
-        channel_id=$(curl -s ${OCTOPUS_FULL_BASE}/api/projects/${project_id}/channels?take=1 -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.Items[0].Id')
+        channel_id=$(curl -s ${OCTOPUS_FULL_BASE}/projects/${project_id}/channels?take=1 -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.Items[0].Id')
         channel_id="${channel_id//\"}"
         branch_name="${CIRCLE_BRANCH//_/\\\\\\\\_}"
         
