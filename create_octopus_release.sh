@@ -2,7 +2,7 @@ set -f
 
 BASE_DIR=$(dirname $0)
 RELEASE_DIR="${BASE_DIR}/deploy"
-OCTOPUS_PROJECTS_URL="${OCTOPUS_BASE}/api/projects/all"
+OCTOPUS_PROJECTS_URL="https://${OCTOPUS_BASE}/api/projects/all"
 
 PROJECT_NAME="${CIRCLE_PROJECT_REPONAME}.${BUILD_NO}"
 ZIP_FILE="${PROJECT_NAME}.zip"
