@@ -33,7 +33,7 @@ for i in ${!namelist[@]}; do
         project_id=${idslist[$i]}
         channel_id=$(curl -s ${OCTOPUS_FULL_BASE}/api/projects/${project_id}/channels?take=1 -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.Items[0].Id')
         channel_id="${channel_id//\"}"
-        branch_name="${CIRCLE_BRANCH//_/\\\\\\_}"
+        branch_name="${CIRCLE_BRANCH//_/\\\\\\\\_}"
         
         post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${branch_name}\", \"Version\":\"${BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [{\"StepName\": \"Unpack Deployment Assets\",\"ActionName\": \"Unpack Deployment Assets\",\"Version\": \"${BUILD_NO}\"}]}"
         echo $post_json
