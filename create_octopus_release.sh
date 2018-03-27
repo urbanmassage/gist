@@ -35,9 +35,7 @@ for i in ${!namelist[@]}; do
         channel_id="${channel_id//\"}"
         branch_name="${CIRCLE_BRANCH//_/\\\\\\\\_}"
         
-        post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${branch_name}\", \"Version\":\"${BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [{\"StepName\": \"Unpack Deployment Assets\",\"ActionName\": \"Unpack Deployment Assets\",\"Version\": \"${BUILD_NO}\"}]}"
-        echo $post_json
-        
+        post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${branch_name}\", \"Version\":\"${BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [{\"StepName\": \"Unpack Deployment Assets\",\"ActionName\": \"Unpack Deployment Assets\",\"Version\": \"${BUILD_NO}\"}]}"       
         status_code=$(curl --silent --output /dev/stderr --write-out "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/releases -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -H "content-type:application/json" -d "${post_json}")
         if [ ${status_code} -ge 300 ];
         then
