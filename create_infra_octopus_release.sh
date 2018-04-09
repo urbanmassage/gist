@@ -12,9 +12,8 @@ OCTOPUS_PROJECTS_URL="${OCTOPUS_FULL_BASE}/projects/all"
 ZIP_FILE="${INFRA_TYPE}.zip"
 
 zip -r "${BASE_DIR}/${ZIP_FILE}" "${MODULES_DIR}" "${INFRA_DIR}"
-mv "${BASE_DIR}/${ZIP_FILE}" "${RELEASE_DIR}/${ZIP_FILE}"
 
-post_status_code=$(curl --silent --output /dev/stderr --write-out "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/packages/raw -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -F "data=@${RELEASE_DIR}/${ZIP_FILE}")
+post_status_code=$(curl --silent --output /dev/stderr --write-out "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/packages/raw -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -F "data=@${BASE_DIR}/${ZIP_FILE}")
 
 if [ ${post_status_code} -ge 300 ];
 then
