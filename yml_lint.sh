@@ -3,9 +3,6 @@ exitCode=0
 deployment_folder="./deploy"
 deployment_file="deploy.yml"
 
-echo "Downloading linter profile"
-wget -O "${1}/lint_conf.yml" https://raw.githubusercontent.com/urbanmassage/gist/master/lint_conf.yml
-
 run(){
     $@
     local ret=$?
@@ -16,8 +13,10 @@ run(){
 
 yamllinter(){
     printf "\nLinting the deploy.yml at ${1}\n"
+    
+    echo "Downloading linter profile"
+    wget -O "${1}/lint_conf.yml" https://raw.githubusercontent.com/urbanmassage/gist/master/lint_conf.yml
 
-    #If the deploy.yml file is present then lint it. Otherwise report an error as one must exist
     if [ -e $1/${deployment_file} ]; then      
         run yamllint -c $1/lint_conf.yml $1/${deployment_file}
     else
