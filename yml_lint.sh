@@ -17,7 +17,7 @@ yamllinter(){
     printf "\nLinting the deploy.yml at ${1}\n"
 
     #If the deploy.yml file is present then lint it. Otherwise report an error as one must exist
-    if [ -e $1/${deployment_file} ]; then
+    if [ -e $1/${deployment_file} ]; then   
         run yamllint -c https://raw.githubusercontent.com/urbanmassage/gist/master/lint_conf.yml $1/${deployment_file}
     else
         echo "Error $1/${deployment_file} file is missing"
