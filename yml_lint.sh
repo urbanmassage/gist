@@ -4,7 +4,7 @@ deployment_folder="./deploy"
 deployment_file="deploy.yml"
 
 echo "Downloading linter profile"
-wget -O $1/lint_conf.yml https://raw.githubusercontent.com/urbanmassage/gist/master/lint_conf.yml
+wget -O "${1}/lint_conf.yml" https://raw.githubusercontent.com/urbanmassage/gist/master/lint_conf.yml
 
 run(){
     $@
