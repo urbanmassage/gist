@@ -1,3 +1,5 @@
+sudo pip install yamllint==1.8.1
+
 exitCode=0
 
 deployment_folder="./deploy"
