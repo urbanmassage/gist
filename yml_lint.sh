@@ -16,7 +16,7 @@ yamllinter(){
     printf "\nLinting the deploy.yml at ${1}\n"
     
     echo "Downloading linter profile"
-    wget -O $1/$lint_file.yml https://raw.githubusercontent.com/urbanmassage/gist/master/$lint_file
+    wget -O $1/$lint_file https://raw.githubusercontent.com/urbanmassage/gist/master/$lint_file
 
     if [ -e $1/$deployment_file ]; then      
         run yamllint -c $1/$lint_file $1/$deployment_file
