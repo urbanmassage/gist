@@ -1,4 +1,4 @@
-sudo pip install yamllint==1.8.1
+pip install yamllint==1.8.1
 
 exitCode=0
 
