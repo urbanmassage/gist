@@ -10,8 +10,6 @@ CURRENT_PROJECT_NAME=$2
 CURRENT_BRANCH_NAME="${3//_/-}"
 PROJECTS=(${4//,/ })
 
-CURRENT_PROJECT=""
-
 for i in ${!PROJECTS[@]}; do
     PROJECTS[$i]="{\"StepName\": \"Deploy ${PROJECTS[$i]}\",\"ActionName\": \"Deploy ${PROJECTS[$i]}\",\"Version\": \"${CURRENT_BUILD_NO}\"}"
 done
