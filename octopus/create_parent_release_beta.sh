@@ -9,7 +9,8 @@ OCTOPUS_PROJECTS_URL="${OCTOPUS_FULL_BASE}/projects/all"
 CURRENT_PROJECT_NAME=$1
 BUILD_NO=$2
 BUILT_PACKAGES=(${3//,/ })
-CURRENT_BRANCH=${4//_/-}
+PREPEND_STRING=$4
+CURRENT_BRANCH=${5//_/-}
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -54,7 +55,7 @@ in_array() {
   ARRAY=$2
   for e in ${ARRAY[*]}
   do
-    if [[ "$e" == "$1" ]]
+    if [[ "$e" == "${PREPEND_STRING}$1" ]]
     then
       return 0
     fi
