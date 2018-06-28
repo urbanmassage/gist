@@ -4,6 +4,7 @@ PROJECTS=$1
 PROJECTS="${PROJECTS//\"}"
 PROJECTS_LIST=(${PROJECTS//,/ })
 COMPARE_URL=$2
+PREPEND_STRING=$3
 
 COMMIT_RANGE=$(echo $COMPARE_URL | sed 's:^.*/compare/::g')
 
@@ -13,8 +14,9 @@ if [[ $(git diff $COMMIT_RANGE --name-status | grep "common") != "" ]] || [[ $(g
 else
     for i in ${!PROJECTS_LIST[@]}; do
         project_name=${PROJECTS_LIST[$i]}
+        full_project_name="${PREPEND_STRING}${project_name}"
         if [[ $(git diff $COMMIT_RANGE --name-status | grep "${project_name}") != "" ]]; then
-            BUILD_PROJECTS+=($project_name)
+            BUILD_PROJECTS+=($full_project_name)
         else
             echo "No changes for ${project_name}"
         fi
