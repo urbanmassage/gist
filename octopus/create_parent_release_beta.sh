@@ -1,6 +1,9 @@
 #!/bin/bash 
 set -f
 
+OCTOPUS_BASE=octopus.urbangroup.tech
+OCTO_API_KEY=API-YDF9C37RE6MJ1JEXHHYTPCQN3A
+
 BASE_DIR=$(dirname $0)
 RELEASE_DIR="${BASE_DIR}/deploy"
 OCTOPUS_FULL_BASE="https://${OCTOPUS_BASE}/api"
@@ -31,19 +34,27 @@ GenerateDeploySteps(){
             echo ${row} | base64 --decode | jq -r ${1}
         }
 
+        LAST_RELEASE=$(echo $(_jq '.LastRelease'))
+
+        if [[ $LAST_RELEASE == "null" ]];
+        then
+            LAST_RELEASE=$BUILD_NO
+        fi
+
         if in_array $(echo $(_jq '.ProjectName')) "${BUILT_PACKAGES[*]}"
         then
-            DEPLOY_STEPS+=( "{\"StepName\": \"$(_jq '.StepName')\",\"ActionName\": \"$(_jq '.ProjectName')\",\"Version\": \"${BUILD_NO}\"}" )
+            DEPLOY_STEPS+=( "{\"StepName\": \"$(_jq '.StepName')\",\"ActionName\": \"$(_jq '.ActionName')\",\"Version\": \"${BUILD_NO}\"}" )
         else    
-            DEPLOY_STEPS+=( "{\"StepName\": \"$(_jq '.StepName')\",\"ActionName\": \"$(_jq '.ProjectName')\",\"Version\": \"$(echo $(_jq '.LastRelease'))\"}" )
+            DEPLOY_STEPS+=( "{\"StepName\": \"$(_jq '.StepName')\",\"ActionName\": \"$(_jq '.ActionName')\",\"Version\": \"$LAST_RELEASE\"}" )
         fi
     done
 
-    DEPLOY_STEPS=$(IFS=, ; echo "${DEPLOY_STEPS[*]}")
+    DEPLOY_STEPS_JOINED=$(IFS=, ; echo "${DEPLOY_STEPS[*]}")
 }
 
 CreateRelease(){
-    post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${CURRENT_BRANCH_NAME}\", \"Version\":\"${BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [$DEPLOY_STEPS]}" 
+    echo $DEPLOY_STEPS_JOINED
+    post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${CURRENT_BRANCH_NAME}\", \"Version\":\"${BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [${DEPLOY_STEPS_JOINED}]}" 
     status_code=$(curl --silent --output /dev/stderr -w "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/releases -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -H "content-type:application/json" -d "${post_json}")
     if [ ${status_code} -ge 300 ];
     then
