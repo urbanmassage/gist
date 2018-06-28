@@ -9,10 +9,9 @@ SUFFIX=$4
 
 COMMIT_RANGE=$(echo $COMPARE_URL | sed 's:^.*/compare/::g')
 
-DIFF=$(git diff $COMMIT_RANGE --name-status)
-echo "$DIFF"
+git diff $COMMIT_RANGE --name-status
 
-if [[ $($DIFF | grep "common") != "" ]] || [[ $(git diff $COMMIT_RANGE --name-status | grep "contracts") != "" ]]; then
+if [[ $(git diff $COMMIT_RANGE --name-status | grep "common") != "" ]] || [[ $(git diff $COMMIT_RANGE --name-status | grep "contracts") != "" ]]; then
     echo "$PROJECTS" >> build_projects.txt
     exit 0
 else
