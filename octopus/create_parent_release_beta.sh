@@ -13,6 +13,7 @@ CURRENT_BRANCH=${4//_/-}
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
 
 GetChannelId(){
     project_id=$(curl --silent ${OCTOPUS_PROJECTS_URL} -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq -r --arg PROJECT_NAME "$CURRENT_PROJECT_NAME" '.[1] | select(.Name==$PROJECT_NAME) | .Id' )
@@ -61,6 +62,10 @@ in_array() {
   done
   return 1
 }
+
+if [ ${BUILD_PACKAGES[@]} -eq 0 ]; then
+    printf "${YELLOW}No packages updated, nothing to do"
+fi
 
 GetChannelId
 GetProjectLastPackages
