@@ -65,6 +65,7 @@ in_array() {
 
 if [[ -z ${BUILD_PACKAGES[@]} ]]; then
     printf "${YELLOW}No packages updated, nothing to do"
+    exit 0
 fi
 
 GetChannelId
