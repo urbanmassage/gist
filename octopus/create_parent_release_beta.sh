@@ -44,8 +44,8 @@ GenerateDeploySteps(){
 
 CreateRelease(){
     post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${CURRENT_BRANCH_NAME}\", \"Version\":\"${BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [$DEPLOY_STEPS]}" 
-    status_code=$(curl --silent -w "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/releases -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -H "content-type:application/json" -d "${post_json}")
-    if [ ${status_code} -ne 200 ];
+    status_code=$(curl --silent --output /dev/null -w "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/releases -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -H "content-type:application/json" -d "${post_json}")
+    if [ ${status_code} -ge 300 ];
     then
         printf "${RED}Upload to Octopus was not successful"
         exit ${status_code}
