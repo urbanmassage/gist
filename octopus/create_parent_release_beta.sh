@@ -63,7 +63,7 @@ in_array() {
   return 1
 }
 
-if [ ${BUILD_PACKAGES[@]} -eq 0 ]; then
+if [[ -z ${BUILD_PACKAGES[@]} ]]; then
     printf "${YELLOW}No packages updated, nothing to do"
 fi
 
