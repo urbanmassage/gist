@@ -15,9 +15,9 @@ if [[ $(git diff $COMMIT_RANGE --name-status | grep "common") != "" ]] || [[ $(g
 else
     for i in ${!PROJECTS_LIST[@]}; do
         project_name=${PROJECTS_LIST[$i]}
-        full_project_name="${PREFIX}${project_name}${SUFFIX}"
+        full_project_name="${PREFIX}${project_name}"
         if [[ $(git diff $COMMIT_RANGE --name-status | grep "${project_name}") != "" ]]; then
-            BUILD_PROJECTS+=($full_project_name)
+            BUILD_PROJECTS+=($full_project_name${SUFFIX})
         else
             echo "No changes for ${project_name}"
         fi
