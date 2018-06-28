@@ -8,7 +8,8 @@ OCTOPUS_PROJECTS_URL="${OCTOPUS_FULL_BASE}/projects/all"
 
 CURRENT_PROJECT_NAME=$1
 BUILD_NO=$2
-BUILT_PACKAGES=(${3//,/ })
+BUILT_PACKAGE_STRING=$3
+BUILT_PACKAGES=(${BUILT_PACKAGE_STRING//,/ })
 CURRENT_BRANCH=${4//_/-}
 
 RED='\033[0;31m'
@@ -43,8 +44,8 @@ GenerateDeploySteps(){
 
 CreateRelease(){
     post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${CURRENT_BRANCH_NAME}\", \"Version\":\"${BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [$DEPLOY_STEPS]}" 
-    status_code=$(curl --silent --output /dev/null -w "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/releases -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -H "content-type:application/json" -d "${post_json}")
-    if [ ${status_code} -ge 300 ];
+    status_code=$(curl --silent -w "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/releases -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -H "content-type:application/json" -d "${post_json}")
+    if [ ${status_code} -ne 200 ];
     then
         printf "${RED}Upload to Octopus was not successful"
         exit ${status_code}
@@ -63,7 +64,7 @@ in_array() {
   return 1
 }
 
-if [[ -z ${BUILD_PACKAGES[@]} ]]; then
+if [[ -z ${BUILT_PACKAGES[@]} ]]; then
     printf "${YELLOW}No packages updated, nothing to do"
     exit 0
 fi
