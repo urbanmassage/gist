@@ -12,7 +12,7 @@ if [[ $(git diff $COMMIT_RANGE --name-status | grep "common") != "" ]] || [[ $(g
     exit 0
 else
     for i in ${!PROJECTS_LIST[@]}; do
-        project_name=PROJECTS_LIST[$i]
+        project_name=${PROJECTS_LIST[$i]}
         full_project_name="${PREPEND_STRING}${project_name}"
         echo "Checking $project_name"
         if [[ $(git diff $COMMIT_RANGE --name-status | grep "${project_name}") != "" ]]; then
