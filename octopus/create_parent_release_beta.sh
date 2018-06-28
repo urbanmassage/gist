@@ -56,7 +56,7 @@ in_array() {
   ARRAY=$2
   for e in ${ARRAY[*]}
   do
-    if [[ "$e" == "${PREPEND_STRING}$1" ]]
+    if [[ "$e" == "$1" ]]
     then
       return 0
     fi
