@@ -23,6 +23,6 @@ else
     done
 
     BUILD_PROJECTS=$(IFS=, ; echo "${BUILD_PROJECTS[*]}")
-    echo $BUILD_PROJECTS >> build_projects.txt
+    echo $BUILD_PROJECTS >> build-projects.txt
 fi
 
