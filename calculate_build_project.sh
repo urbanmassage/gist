@@ -11,7 +11,7 @@ COMMIT_RANGE=$(echo $COMPARE_URL | sed 's:^.*/compare/::g')
 
 git diff $COMMIT_RANGE --name-status
 
-if [[ $(git diff $COMMIT_RANGE --name-status | grep "common") != "" ]] || [[ $(git diff $COMMIT_RANGE --name-status | grep "contracts") != "" ]]; then
+if [[ $(git diff $COMMIT_RANGE --name-status | grep "common") != "" ]] || [[ $(git diff $COMMIT_RANGE --name-status | grep "contracts") != "" ]] || [[ $(git diff $COMMIT_RANGE --name-status | grep "integration_tests") != "" ]]; then
     echo "$PROJECTS" >> build_projects.txt
     exit 0
 else
