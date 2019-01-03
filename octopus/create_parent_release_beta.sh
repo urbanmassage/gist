@@ -1,9 +1,6 @@
 #!/bin/bash 
 set -f
 
-OCTOPUS_BASE=octopus.urbangroup.tech
-OCTO_API_KEY=API-YDF9C37RE6MJ1JEXHHYTPCQN3A
-
 BASE_DIR=$(dirname $0)
 RELEASE_DIR="${BASE_DIR}/deploy"
 OCTOPUS_FULL_BASE="https://${OCTOPUS_BASE}/api"
