@@ -35,10 +35,11 @@ for i in ${!namelist[@]}; do
     if [[ ${namelist[$i]} == "${CURRENT_PROJECT_NAME}" ]];
     then
         project_id=${idslist[$i]}
-        if [ -z "$CHANNEL" ]; then
+        if [ -z "$CHANNEL" ]; 
+        then
             channel_id=$(curl -s ${OCTOPUS_FULL_BASE}/projects/${project_id}/channels?take=1 -H "X-Octopus-ApiKey:${OCTO_API_KEY}" | jq '.Items[0].Id')
             channel_id="${channel_id//\"}"
-        elif
+        else
             channel_id="$CHANNEL"
         fi
         post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${CURRENT_BRANCH_NAME}\", \"Version\":\"${CURRENT_BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [{\"StepName\": \"${STEP_NAME}\",\"ActionName\": \"${STEP_NAME}\",\"Version\": \"${CURRENT_BUILD_NO}\"}]}"       
