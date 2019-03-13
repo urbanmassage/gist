@@ -10,8 +10,7 @@ CURRENT_BUILD_NO=$1
 CURRENT_PROJECT_NAME=$2
 CURRENT_BRANCH_NAME="${3//_/-}"
 CHANNEL=$4
-
-DEFAULT_PACKAGE_STEP_NAME="Unpack Deployment Assets"
+STEP_NAME=${5:-Unpack Deployment Assets}
 
 PROJECT_NAME="${CURRENT_PROJECT_NAME}.${CURRENT_BUILD_NO}"
 ZIP_FILE="${PROJECT_NAME}.zip"
@@ -36,7 +35,7 @@ for i in ${!namelist[@]}; do
         else
             channel_id="$CHANNEL"
         fi
-        post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${CURRENT_BRANCH_NAME}\", \"Version\":\"${CURRENT_BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [{\"StepName\": \"${DEFAULT_PACKAGE_STEP_NAME}\",\"ActionName\": \"${DEFAULT_PACKAGE_STEP_NAME}\",\"Version\": \"${CURRENT_BUILD_NO}\"}]}"       
+        post_json="{\"ProjectId\":\"${project_id}\", \"ReleaseNotes\":\"Branch: ${CURRENT_BRANCH_NAME}\", \"Version\":\"${CURRENT_BUILD_NO}\", \"ChannelId\":\"${channel_id}\",\"SelectedPackages\": [{\"StepName\": \"${STEP_NAME}\",\"ActionName\": \"${STEP_NAME}\",\"Version\": \"${CURRENT_BUILD_NO}\"}]}"       
         status_code=$(curl --silent --output /dev/stderr --write-out "%{http_code}" -X POST ${OCTOPUS_FULL_BASE}/releases -H "X-Octopus-ApiKey:${OCTO_API_KEY}" -H "content-type:application/json" -d "${post_json}")
         if [ ${status_code} -ge 300 ];
         then
