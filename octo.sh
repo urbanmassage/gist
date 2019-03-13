@@ -27,7 +27,7 @@ function octo(){
     PUSH_COMMAND="--package=${APPLICATION_NAME}.${BUILD_NUMBER}.zip --replace-existing ${CREDENTIALS}"
     CREATE_RELEASE_COMMAND="--project=${APPLICATION_NAME} --version=${BUILD_NUMBER} --packageversion=${BUILD_NUMBER} ${CREDENTIALS}"
 
-    if $CREATE_RELEASE; then
+    if $PUBLISH; then
         docker run --rm -v $(pwd):/src octopusdeploy/octo pack ${PACKAGE_COMMAND}
         docker run --rm -v $(pwd):/src octopusdeploy/octo push ${PUSH_COMMAND}
     else
