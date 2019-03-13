@@ -28,9 +28,9 @@ function octo(){
     CREATE_RELEASE_COMMAND="--project=${APPLICATION_NAME} --version=${BUILD_NUMBER} --packageversion=${BUILD_NUMBER} ${CREDENTIALS}"
 
     if $PUBLISH; then
-        docker run --rm -v $(pwd):/src octopusdeploy/octo pack ${PACKAGE_COMMAND}
-        docker run --rm -v $(pwd):/src octopusdeploy/octo push ${PUSH_COMMAND}
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src octopusdeploy/octo pack ${PACKAGE_COMMAND}
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src octopusdeploy/octo push ${PUSH_COMMAND}
     else
-        docker run --rm -v $(pwd):/src octopusdeploy/octo create-release ${CREATE_RELEASE_COMMAND}
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src octopusdeploy/octo create-release ${CREATE_RELEASE_COMMAND}
     fi
 }
