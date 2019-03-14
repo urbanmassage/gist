@@ -22,13 +22,16 @@ done
 CREDENTIALS="--server=${OCTOPUS_FULL_BASE} --apiKey=${OCTOPUS_API_KEY}"
 
 # PACKAGE
-PACKAGE_COMMAND="--id=${APPLICATION_NAME} --format=zip --version=${BUILD_NUMBER} --basePath=${BASE_PATH} --overwrite"
+PACKAGE_COMMAND="--id=${APPLICATION_NAME} --format=zip --version=${BUILD_NUMBER} --overwrite"
 PUSH_COMMAND="--package=${APPLICATION_NAME}.${BUILD_NUMBER}.zip --replace-existing ${CREDENTIALS}"
 CREATE_RELEASE_COMMAND="--project=${APPLICATION_NAME} --version=${BUILD_NUMBER} --packageversion=${BUILD_NUMBER} ${CREDENTIALS}"
 
 if $PUBLISH; then
-    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src octopusdeploy/octo pack ${PACKAGE_COMMAND}
-    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src octopusdeploy/octo push ${PUSH_COMMAND}
+    docker create -v /src --name data alpine:3.4 /bin/true
+    docker cp ${BASE_PATH} data:/src
+
+    docker run --rm --volumes-from data octopusdeploy/octo pack ${PACKAGE_COMMAND}
+    docker run --rm --volumes-from data octopusdeploy/octo push ${PUSH_COMMAND}
 else
     docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src octopusdeploy/octo create-release ${CREATE_RELEASE_COMMAND}
 fi
