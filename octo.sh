@@ -36,6 +36,8 @@ if $PUBLISH; then
 
     docker run --rm --volumes-from data octopusdeploy/octo pack ${PACKAGE_COMMAND}
     docker run --rm --volumes-from data octopusdeploy/octo push ${PUSH_COMMAND}
-else
+fi
+
+if $CREATE_RELEASE; then
     docker run --rm octopusdeploy/octo create-release ${CREATE_RELEASE_COMMAND}
 fi
