@@ -21,7 +21,7 @@ for i in "$@"; do
     shift
 done
 
-BRANCH="${BRANCH//_/“_“}" #Escaping _ because they mean italic in markdown
+BRANCH="${BRANCH//_/\_}" #Escaping _ because they mean italic in markdown
 
 CREDENTIALS="--server=${OCTOPUS_FULL_BASE} --apiKey=${OCTOPUS_API_KEY}"
 
