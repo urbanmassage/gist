@@ -1,0 +1,14 @@
+BRANCH=$(echo "$CIRCLE_BRANCH" | awk '{print tolower($0)}')
+VERSION=$(gitversion /showvariable SemVer)
+if [ "$BRANCH" == "master" ]; then
+    VERSION=$(gitversion /showvariable MajorMinorPatch)
+else
+   MajorMinor=$(gitversion /showvariable MajorMinorPatch)
+   BranchName=$(gitversion /showvariable BranchName)
+   BuildMeta=$(gitversion /showvariable BuildMetaDataPadded)
+   BranchName="${BranchName/_/\-}"
+   VERSION="${MajorMinor}-${BranchName}${BuildMeta}"
+fi
+COMMAND=$@
+COMMAND="${COMMAND/x.x.x/${VERSION}}"
+exec $COMMAND
