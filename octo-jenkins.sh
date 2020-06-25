@@ -7,6 +7,7 @@ BASE_PATH="./deploy"
 
 PUBLISH=false
 CREATE_RELEASE=false
+DEPLOYTO=false
 
 for i in "$@"; do
     case $1 in
@@ -16,6 +17,7 @@ for i in "$@"; do
         --appname) APPLICATION_NAME="$2"; shift ;;
         --basepath) BASE_PATH="$2"; shift ;;
         --branch) BRANCH="$2"; shift;; 
+        --deployto) DEPLOYTO="$2"; shift;; 
     esac
     shift
 done
@@ -38,5 +40,9 @@ if $PUBLISH; then
 fi
 
 if $CREATE_RELEASE; then
-    docker run --rm octopusdeploy/octo create-release ${CREATE_RELEASE_COMMAND}
+    if $DEPLOYTO; then
+        docker run --rm octopusdeploy/octo create-release --deployTo=${DEPLOYTO} ${CREATE_RELEASE_COMMAND}
+    else
+        docker run --rm octopusdeploy/octo create-release ${CREATE_RELEASE_COMMAND}
+    fi
 fi
