@@ -9,6 +9,7 @@ BASE_PATH="./deploy"
 
 PUBLISH=false
 CREATE_RELEASE=false
+RELEASE_NOTES=""
 
 declare -a deploy_targets=()
 
@@ -21,6 +22,7 @@ for i in "$@"; do
         --basepath) BASE_PATH="$2"; shift ;;
         --branch) BRANCH="$2"; shift;; 
         --deployto) deploy_targets+=("$2"); shift;; 
+        --releasenotes) RELEASE_NOTES="$2"; shift ;;
     esac
     shift
 done
