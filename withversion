@@ -3,11 +3,8 @@ VERSION=$(gitversion /showvariable SemVer)
 if [ "$BRANCH" == "master" ] | [ "$BRANCH" == "develop" ]; then
     VERSION=$(gitversion /showvariable MajorMinorPatch)
 else
-   MajorMinor=$(gitversion /showvariable MajorMinorPatch)
-   BranchName=$(gitversion /showvariable BranchName)
-   BuildMeta=$(gitversion /showvariable BuildMetaDataPadded)
-   BranchName="${BranchName/_/\-}"
-   VERSION="${MajorMinor}-${BranchName}${BuildMeta}"
+   SemVer=$(gitversion /showvariable SemVer)
+   VERSION="${SemVer}"
 fi
 COMMAND=$@
 COMMAND="${COMMAND/x.x.x/${VERSION}}"
