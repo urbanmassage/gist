@@ -42,12 +42,14 @@ PACKAGE_COMMAND="--id=${APPLICATION_NAME} --format=zip --version=${BUILD_NUMBER}
 PUSH_COMMAND="--package=${APPLICATION_NAME}.${BUILD_NUMBER}.zip --replace-existing ${CREDENTIALS}"
 CREATE_RELEASE_COMMAND="--project=${APPLICATION_NAME} --version=${BUILD_NUMBER} --packageversion=${BUILD_NUMBER} --releasenotes=${RELEASE_NOTES} ${DEPLOY_TO}${CREDENTIALS}"
 
-if $PUBLISH; then
-    docker create -v /src --name octopus-data alpine:3.4 /bin/true
-    docker cp ${BASE_PATH} octopus-data:/src
+RANDOM_STRING=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 32 | head -n 1)
 
-    docker run --rm --volumes-from octopus-data octopusdeploy/octo pack ${PACKAGE_COMMAND}
-    docker run --rm --volumes-from octopus-data octopusdeploy/octo push ${PUSH_COMMAND}
+if $PUBLISH; then
+    docker create -v /src --name octopus-data-${RANDOM_STRING} alpine:3.4 /bin/true
+    docker cp ${BASE_PATH} octopus-data-${RANDOM_STRING}:/src
+
+    docker run --rm --volumes-from octopus-data-${RANDOM_STRING} octopusdeploy/octo pack ${PACKAGE_COMMAND}
+    docker run --rm --volumes-from octopus-data-${RANDOM_STRING} octopusdeploy/octo push ${PUSH_COMMAND}
 fi
 
 if $CREATE_RELEASE; then
