@@ -3,8 +3,9 @@ VERSION=$(gitversion /showvariable SemVer)
 if [ "$BRANCH" == "master" ] | [ "$BRANCH" == "develop" ]; then
     VERSION=$(gitversion /showvariable MajorMinorPatch)
 else
-   FullSemVer=$(gitversion /showvariable FullSemVer)
-   VERSION="${FullSemVer}"
+   SemVer=$(gitversion /showvariable SemVer)
+   BuildMetaDataPadded=$(gitversion /showvariable BuildMetaDataPadded)
+   VERSION="${SemVer}-${BuildMetaDataPadded}"
 fi
 COMMAND=$@
 COMMAND="${COMMAND/x.x.x/${VERSION}}"
