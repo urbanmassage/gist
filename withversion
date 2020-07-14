@@ -1,4 +1,3 @@
-BRANCH=$(echo "$CIRCLE_BRANCH" | awk '{print tolower($0)}')
 VERSION=$(gitversion /showvariable SemVer)
 if [ "$BRANCH" == "master" ] | [ "$BRANCH" == "develop" ]; then
     VERSION=$(gitversion /showvariable MajorMinorPatch)
