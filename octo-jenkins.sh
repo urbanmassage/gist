@@ -22,6 +22,7 @@ for i in "$@"; do
         --basepath) BASE_PATH="$2"; shift ;;
         --branch) BRANCH="$2"; shift;; 
         --deployto) deploy_targets+=("$2"); shift;; 
+        --gitRef) GITREF="$2"; shift;;
         --releasenotes) RELEASE_NOTES="$2"; shift ;;
     esac
     shift
@@ -40,7 +41,7 @@ for deploy_target in "${deploy_targets[@]}"
 # PACKAGE
 PACKAGE_COMMAND="--id=${APPLICATION_NAME} --format=zip --version=${BUILD_NUMBER} --overwrite"
 PUSH_COMMAND="--package=${APPLICATION_NAME}.${BUILD_NUMBER}.zip --replace-existing ${CREDENTIALS}"
-CREATE_RELEASE_COMMAND="--project=${APPLICATION_NAME} --version=${BUILD_NUMBER} --packageversion=${BUILD_NUMBER} --releasenotes=${RELEASE_NOTES} --ignoreExisting ${DEPLOY_TO}${CREDENTIALS}"
+CREATE_RELEASE_COMMAND="--project=${APPLICATION_NAME} --version=${BUILD_NUMBER} --packageversion=${BUILD_NUMBER} --releasenotes=${RELEASE_NOTES} --gitRef ${GITREF} --ignoreExisting ${DEPLOY_TO}${CREDENTIALS}"
 
 RANDOM_STRING=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 32 | head -n 1)
 
